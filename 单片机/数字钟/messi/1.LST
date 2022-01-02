@@ -1,0 +1,149 @@
+C51 COMPILER V9.00   1                                                                     10/15/2014 18:52:13 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE 1
+OBJECT MODULE PLACED IN 1.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE 1.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #define uchar unsigned char
+   3          #define uint unsigned int
+   4          sbit dula=P2^6;
+   5          sbit wela=P2^7;
+   6          uchar num,num1,messi,crespo,kobe,hour1,hour2,minute1,minute2,second1,second2;
+   7          uchar code table[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+   8          void display(uchar hour1,uchar hour2,uchar minute1,uchar minute2,uchar second1,uchar second2);
+   9          void init()
+  10          {
+  11   1              wela=0;
+  12   1              dula=0;
+  13   1              num1=0;
+  14   1              messi=0;
+  15   1              crespo=0;
+  16   1              EA=1;//开总中断 
+  17   1              TR0=1;//启动定时器0中断
+  18   1              ET0=1;//开定时器0中断
+  19   1              TMOD=0x01;//定时器0工作方式1
+  20   1              TH0=(65536-50000)/256;//定时器为50ms
+  21   1              TL0=(65536-50000)%256;
+  22   1      }
+  23          void delay(uint z)
+  24          {
+  25   1              uint x,y;
+  26   1              for(x=z;x>0;x--)
+  27   1                      for(y=110;y>0;y--);
+  28   1      }
+  29          void main()
+  30          {
+  31   1              init();
+  32   1              while(1)
+  33   1              {
+  34   2                      if(num1==20)
+  35   2                      {
+  36   3                              num1=0;
+  37   3                              messi++; 
+  38   3                              second1=messi/10;
+  39   3                              second2=messi%10;
+  40   3                              if(messi==59)
+  41   3                              {       
+  42   4                                      crespo++;
+  43   4                                      messi=0;
+  44   4                                      minute1=crespo/10;
+  45   4                                      minute2=crespo%10;
+  46   4                                      if(crespo==59)
+  47   4                                      {
+  48   5                                              crespo=0;
+  49   5                                              kobe++;
+  50   5                                              hour1=kobe/10;
+  51   5                                              hour2=kobe%10;
+  52   5                                              if(kobe==23)
+  53   5                                                      kobe=0;
+  54   5                                      }
+  55   4                              }
+C51 COMPILER V9.00   1                                                                     10/15/2014 18:52:13 PAGE 2   
+
+  56   3                      }
+  57   2                      display(hour1,hour2,minute1,minute2,second1,second2);           
+  58   2              }
+  59   1      }
+  60          void timer0() interrupt 1
+  61          {
+  62   1              TH0=(65536-50000)/256;//定时器为50ms
+  63   1              TL0=(65536-50000)%256;
+  64   1              num1++; 
+  65   1      }
+  66          void display(uchar hour1,uchar hour2,uchar minute1,uchar minute2,uchar second1,uchar second2)
+  67          {
+  68   1              dula=1;
+  69   1              P0=table[hour1];
+  70   1              dula=0;
+  71   1              P0=0xff;
+  72   1              wela=1;
+  73   1              P0=0xfe;
+  74   1              wela=0;
+  75   1              delay(1);
+  76   1      
+  77   1              dula=1;
+  78   1              P0=table[hour2];
+  79   1              dula=0;
+  80   1              P0=0xff;
+  81   1              wela=1;
+  82   1              P0=0xfd;
+  83   1              wela=0;
+  84   1              delay(1);
+  85   1      
+  86   1              dula=1;
+  87   1              P0=table[minute1];
+  88   1              dula=0;
+  89   1              P0=0xff;
+  90   1              wela=1;
+  91   1              P0=0xfb;
+  92   1              wela=0;
+  93   1              delay(1);
+  94   1      
+  95   1          dula=1;
+  96   1              P0=table[minute2];
+  97   1              dula=0;
+  98   1              P0=0xff;
+  99   1              wela=1;
+ 100   1              P0=0xf7;
+ 101   1              wela=0;
+ 102   1              delay(1);
+ 103   1      
+ 104   1              dula=1;
+ 105   1              P0=table[second1];
+ 106   1              dula=0;
+ 107   1              P0=0xff;
+ 108   1              wela=1;
+ 109   1              P0=0xef;
+ 110   1              wela=0;
+ 111   1              delay(1);
+ 112   1      
+ 113   1              dula=1;
+ 114   1              P0=table[second2];
+ 115   1              dula=0;
+ 116   1              P0=0xff;
+ 117   1              wela=1;
+C51 COMPILER V9.00   1                                                                     10/15/2014 18:52:13 PAGE 3   
+
+ 118   1              P0=0xdf;
+ 119   1              wela=0;
+ 120   1              delay(1);
+ 121   1      }
+ 122                  
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    312    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     11       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,69 @@
+C51 COMPILER V9.00   LESSON3_3                                                             09/03/2014 17:04:18 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE LESSON3_3
+OBJECT MODULE PLACED IN lesson3-3.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE lesson3-3.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #define uint unsigned int
+   3          #define uchar unsigned char
+   4          sbit wela=P2^7;
+   5          sbit dula=P2^6;
+   6          sbit d1=P1^0;
+   7          uchar num;
+   8          uchar code table[]={
+   9          0x3f,0x06,0x5b,0x4f,
+  10          0x66,0x6d,0x7d,0x07,
+  11          0x7f,0x6f,0x77,0x7c,
+  12          0x39,0x5e,0x79,0x71};
+  13          void delay(uint z);
+  14          void main()
+  15          {
+  16   1              EA=1;
+  17   1              EX0=1;
+  18   1              wela=1;
+  19   1              P0=0xea;//11101010
+  20   1              wela=0;
+  21   1              while(1)
+  22   1              {
+  23   2                      for(num=0;num<16;num++)
+  24   2                      {
+  25   3                       d1=1;
+  26   3                       dula=1;
+  27   3                       P0=table[num];
+  28   3                       dula=0;
+  29   3                       delay(1000);
+  30   3                      }
+  31   2              }
+  32   1      
+  33   1      }
+  34          void delay(z)
+  35          {
+*** WARNING C235 IN LINE 35 OF LESSON3-3.C: parameter 1: different types
+  36   1              uint x,y;
+  37   1              for(x=z;x>0;x--)
+  38   1                      for(y=110;y>0;y--);
+  39   1      }
+  40          void exter0() interrupt 0
+  41          {
+  42   1              d1=0;   
+  43   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     79    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.00   LESSON3_3                                                             09/03/2014 17:04:18 PAGE 2   
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

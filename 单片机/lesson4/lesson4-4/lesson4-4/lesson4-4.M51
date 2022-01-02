@@ -1,0 +1,230 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        09/06/2014  12:22:01  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE STARTUP.obj, lesson4-4.obj TO lesson4-4 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  lesson4-4.obj (LESSON4_4)
+
+
+LINK MAP OF MODULE:  lesson4-4 (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0005H     UNIT         ?DT?LESSON4_4
+            IDATA   000DH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     07F2H                  *** GAP ***
+            CODE    0800H     0044H     UNIT         ?PR?_DISPLAY?LESSON4_4
+            CODE    0844H     0026H     UNIT         ?PR?_DELAY?LESSON4_4
+            CODE    086AH     001DH     UNIT         ?PR?MAIN?LESSON4_4
+            CODE    0887H     0017H     UNIT         ?PR?INIT?LESSON4_4
+            CODE    089EH     0010H     UNIT         ?CO?LESSON4_4
+            CODE    08AEH     000CH     UNIT         ?C_C51STARTUP
+            CODE    08BAH     0009H     UNIT         ?PR?TIMER0?LESSON4_4
+
+
+
+OVERLAY MAP OF MODULE:   lesson4-4 (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?LESSON4_4
+
+?PR?MAIN?LESSON4_4
+  +--> ?PR?INIT?LESSON4_4
+  +--> ?PR?_DISPLAY?LESSON4_4
+
+?PR?_DISPLAY?LESSON4_4
+  +--> ?CO?LESSON4_4
+  +--> ?PR?_DELAY?LESSON4_4
+
+
+
+SYMBOL TABLE OF MODULE:  lesson4-4 (?C_STARTUP)
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/06/2014  12:22:01  PAGE 2
+
+
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:08AEH         SEGMENT       ?C_C51STARTUP
+  I:000DH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:08B1H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:08AEH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:08AEH         LINE#         133
+  C:08B0H         LINE#         134
+  C:08B1H         LINE#         135
+  C:08B2H         LINE#         136
+  C:08B4H         LINE#         185
+  C:08B7H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        LESSON4_4
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  C:089EH         PUBLIC        table
+  D:00A8H         PUBLIC        IE
+  C:084AH         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  C:086AH         PUBLIC        main
+  B:00A0H.6       PUBLIC        dula
+  B:00A0H.7       PUBLIC        wela
+  D:0008H         PUBLIC        bai
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  C:0887H         PUBLIC        init
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/06/2014  12:22:01  PAGE 3
+
+
+  D:0009H         PUBLIC        temp
+  D:000AH         PUBLIC        aa
+  D:000BH         PUBLIC        shi
+  B:00A8H.1       PUBLIC        ET0
+  D:000CH         PUBLIC        ge
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  C:08BAH         PUBLIC        timer0
+  B:0088H.4       PUBLIC        TR0
+  D:00C8H         PUBLIC        T2CON
+  C:0800H         PUBLIC        _display
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:086AH         LINE#         15
+  C:086AH         LINE#         16
+  C:086AH         LINE#         17
+  C:086DH         LINE#         18
+  C:086DH         LINE#         19
+  C:086DH         LINE#         20
+  C:0872H         LINE#         21
+  C:0872H         LINE#         22
+  C:0874H         LINE#         23
+  C:0879H         LINE#         24
+  C:0879H         LINE#         25
+  C:087CH         LINE#         26
+  C:087CH         LINE#         27
+  C:0885H         LINE#         28
+  C:0885H         LINE#         29
+  -------         ENDPROC       MAIN
+  -------         PROC          INIT
+  C:0887H         LINE#         34
+  C:0887H         LINE#         35
+  C:0887H         LINE#         36
+  C:0889H         LINE#         37
+  C:088BH         LINE#         38
+  C:088EH         LINE#         39
+  C:0891H         LINE#         40
+  C:0894H         LINE#         41
+  C:0897H         LINE#         42
+  C:0899H         LINE#         43
+  C:089BH         LINE#         44
+  C:089DH         LINE#         45
+  -------         ENDPROC       INIT
+  -------         PROC          L?0018
+  -------         ENDPROC       L?0018
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        z
+  -------         DO            
+  D:0006H         SYMBOL        x
+  D:0004H         SYMBOL        y
+  -------         ENDDO         
+  C:084AH         LINE#         46
+  C:084AH         LINE#         47
+  C:084AH         LINE#         49
+  C:0853H         LINE#         50
+  C:0869H         LINE#         51
+  -------         ENDPROC       _DELAY
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/06/2014  12:22:01  PAGE 4
+
+
+  -------         PROC          _DISPLAY
+  D:0007H         SYMBOL        bai
+  D:0002H         SYMBOL        shi
+  D:0003H         SYMBOL        ge
+  C:0800H         LINE#         52
+  C:0802H         LINE#         53
+  C:0802H         LINE#         54
+  C:0804H         LINE#         55
+  C:080BH         LINE#         56
+  C:080DH         LINE#         57
+  C:0810H         LINE#         58
+  C:0812H         LINE#         59
+  C:0815H         LINE#         60
+  C:0815H         LINE#         61
+  C:0818H         LINE#         63
+  C:081AH         LINE#         64
+  C:081EH         LINE#         65
+  C:0820H         LINE#         66
+  C:0823H         LINE#         67
+  C:0825H         LINE#         68
+  C:0828H         LINE#         69
+  C:0828H         LINE#         70
+  C:082BH         LINE#         72
+  C:082DH         LINE#         73
+  C:0831H         LINE#         74
+  C:0833H         LINE#         75
+  C:0836H         LINE#         76
+  C:0838H         LINE#         77
+  C:083BH         LINE#         78
+  C:083DH         LINE#         79
+  -------         ENDPROC       _DISPLAY
+  -------         PROC          TIMER0
+  C:08BAH         LINE#         82
+  C:08BAH         LINE#         84
+  C:08BDH         LINE#         85
+  C:08C0H         LINE#         86
+  C:08C2H         LINE#         87
+  -------         ENDPROC       TIMER0
+  -------         ENDMOD        LESSON4_4
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00C9H BYTE ( 9%) *
+******************************************************************************
+
+Program Size: data=14.0 xdata=0 code=201
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

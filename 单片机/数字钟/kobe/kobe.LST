@@ -1,0 +1,370 @@
+C51 COMPILER V9.00   KOBE                                                                  10/18/2014 19:42:38 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE KOBE
+OBJECT MODULE PLACED IN kobe.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE kobe.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #define uchar unsigned char
+   3          #define uint unsigned int
+   4          sbit dula=P2^6;
+   5          sbit wela=P2^7;
+   6          sbit beep=P3^7;
+   7          uchar num,num1,hour1,hour2,minute1,minute2,second1,second2,mode,temp,aa,hour10,hour20,minute10,minute20,se
+             -cond10,second20;
+   8          long int messi,cao;
+   9          uchar code table[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+  10          uchar keyscan();
+  11          void display2(uchar aa);
+  12          void display(uchar hour1,uchar hour2,uchar minute1,uchar minute2,uchar second1,uchar second2);
+  13          void display1(uchar hour10,uchar hour20,uchar minute10,uchar minute20,uchar second10,uchar second20);
+  14          void zd_clock();
+  15          void delay(uint z)
+  16          {
+  17   1              uint t1,y;
+  18   1              for(t1=z;t1>0;t1--)
+  19   1                      for(y=110;y>0;y--);
+  20   1      }
+  21          void init()
+  22          {       
+  23   1              wela=0;
+  24   1              dula=0;
+  25   1              num1=0;
+  26   1              cao=86400;
+  27   1              messi=0;
+  28   1              EA=1;//开总中断 
+  29   1              TR0=1;//启动定时器0中断
+  30   1              ET0=1;//开定时器0中断
+  31   1              TMOD=0x01;//定时器0工作方式1
+  32   1              TH0=(65536-50000)/256;//定时器为50ms
+  33   1              TL0=(65536-50000)%256;
+  34   1      }
+  35          void main()
+  36          {
+  37   1              init(); 
+  38   1              
+  39   1              while(1)
+  40   1              {        display2(keyscan());
+  41   2                      if(num1==20)
+  42   2                      {       
+  43   3                              num1=0;
+  44   3                              messi++; 
+  45   3                              if(messi==86400)
+  46   3                                      messi=0;
+  47   3                              hour1=messi/36000;
+  48   3                              hour2=messi%36000/3600;
+  49   3                              minute1=messi%3600/600;
+  50   3                              minute2=messi%3600%600/60;
+  51   3                              second1=messi%60/10;
+  52   3                              second2=messi%10;
+  53   3                              
+  54   3                              hour10=cao/36000;
+C51 COMPILER V9.00   KOBE                                                                  10/18/2014 19:42:38 PAGE 2   
+
+  55   3                              hour20=cao%36000/3600;
+  56   3                              minute10=cao%3600/600;
+  57   3                              minute20=cao%3600%600/60;
+  58   3                              second10=cao%60/10;
+  59   3                              second20=cao%10;        
+  60   3                      } 
+  61   2                      zd_clock();
+  62   2                      if(mode%2==1)
+  63   2                      {
+  64   3                              display1(hour10,hour20,minute10,minute20,second10,second20);  
+  65   3                      }
+  66   2                      else
+  67   2                      {       
+  68   3                              display(hour1,hour2,minute1,minute2,second1,second2);
+  69   3                      }
+  70   2                      
+  71   2              
+  72   2              }
+  73   1      }
+  74          void timer0() interrupt 1
+  75          {       
+  76   1              TH0=(65536-50000)/256;//定时器为50ms
+  77   1              TL0=(65536-50000)%256;
+  78   1              num1++; 
+  79   1               
+  80   1      }
+  81          void display(uchar hour1,uchar hour2,uchar minute1,uchar minute2,uchar second1,uchar second2)
+  82          {
+  83   1              dula=1;
+  84   1              P0=table[hour1];
+  85   1              dula=0;
+  86   1              P0=0xff;
+  87   1              wela=1;
+  88   1              P0=0xfe;
+  89   1              wela=0;
+  90   1              delay(1);
+  91   1      
+  92   1              dula=1;
+  93   1              P0=table[hour2];
+  94   1              dula=0;
+  95   1              P0=0xff;
+  96   1              wela=1;
+  97   1              P0=0xfd;
+  98   1              wela=0;
+  99   1              delay(1);
+ 100   1      
+ 101   1              dula=1;
+ 102   1              P0=table[minute1];
+ 103   1              dula=0;
+ 104   1              P0=0xff;
+ 105   1              wela=1;
+ 106   1              P0=0xfb;
+ 107   1              wela=0;
+ 108   1              delay(1);
+ 109   1      
+ 110   1          dula=1;
+ 111   1              P0=table[minute2];
+ 112   1              dula=0;
+ 113   1              P0=0xff;
+ 114   1              wela=1;
+ 115   1              P0=0xf7;
+ 116   1              wela=0;
+C51 COMPILER V9.00   KOBE                                                                  10/18/2014 19:42:38 PAGE 3   
+
+ 117   1              delay(1);
+ 118   1      
+ 119   1              dula=1;
+ 120   1              P0=table[second1];
+ 121   1              dula=0;
+ 122   1              P0=0xff;
+ 123   1              wela=1;
+ 124   1              P0=0xef;
+ 125   1              wela=0;
+ 126   1              delay(1);
+ 127   1      
+ 128   1              dula=1;
+ 129   1              P0=table[second2];
+ 130   1              dula=0;
+ 131   1              P0=0xff;
+ 132   1              wela=1;
+ 133   1              P0=0xdf;
+ 134   1              wela=0;
+ 135   1              delay(1);
+ 136   1      }
+ 137          void display1(uchar hour10,uchar hour20,uchar minute10,uchar minute20,uchar second10,uchar second20)
+ 138          {
+ 139   1              dula=1;
+ 140   1              P0=table[hour10];
+ 141   1              dula=0;
+ 142   1              P0=0xff;
+ 143   1              wela=1;
+ 144   1              P0=0xfe;
+ 145   1              wela=0;
+ 146   1              delay(1);
+ 147   1      
+ 148   1              dula=1;
+ 149   1              P0=table[hour20];
+ 150   1              dula=0;
+ 151   1              P0=0xff;
+ 152   1              wela=1;
+ 153   1              P0=0xfd;
+ 154   1              wela=0;
+ 155   1              delay(1);
+ 156   1      
+ 157   1              dula=1;
+ 158   1              P0=table[minute10];
+ 159   1              dula=0;
+ 160   1              P0=0xff;
+ 161   1              wela=1;
+ 162   1              P0=0xfb;
+ 163   1              wela=0;
+ 164   1              delay(1);
+ 165   1      
+ 166   1          dula=1;
+ 167   1              P0=table[minute20];
+ 168   1              dula=0;
+ 169   1              P0=0xff;
+ 170   1              wela=1;
+ 171   1              P0=0xf7;
+ 172   1              wela=0;
+ 173   1              delay(1);
+ 174   1      
+ 175   1              dula=1;
+ 176   1              P0=table[second10];
+ 177   1              dula=0;
+ 178   1              P0=0xff;
+C51 COMPILER V9.00   KOBE                                                                  10/18/2014 19:42:38 PAGE 4   
+
+ 179   1              wela=1;
+ 180   1              P0=0xef;
+ 181   1              wela=0;
+ 182   1              delay(1);
+ 183   1      
+ 184   1              dula=1;
+ 185   1              P0=table[second20];
+ 186   1              dula=0;
+ 187   1              P0=0xff;
+ 188   1              wela=1;
+ 189   1              P0=0xdf;
+ 190   1              wela=0;
+ 191   1              delay(1);
+ 192   1      }
+ 193          void display2(uchar aa)
+ 194          {
+ 195   1                              dula=1;
+ 196   1                              P0=table[aa];
+ 197   1                              dula=0;         
+ 198   1      }
+ 199          uchar keyscan()
+ 200          {
+ 201   1              P3=0xfe;
+ 202   1              temp=P3;
+ 203   1              temp=temp&0xf0;
+ 204   1              while(temp!=0xf0)
+ 205   1              {
+ 206   2                              delay(10);
+ 207   2                              temp=P3;
+ 208   2                              temp=temp&0xf0;
+ 209   2                              while(temp!=0xf0)
+ 210   2                              {
+ 211   3                                      temp=P3;
+ 212   3                                      switch(temp)
+ 213   3                                      {
+ 214   4                                              case 0xee: messi=messi+1;
+ 215   4                                                      break;
+ 216   4                                              case 0xde: messi=messi+60;
+ 217   4                                                      break;
+ 218   4                                              case 0xbe: messi=messi+3600;
+ 219   4                                                      break;
+ 220   4                                              case 0x7e: cao=cao-1;
+ 221   4                                                      break;
+ 222   4                                      }
+ 223   3                                       while(temp!=0xf0)
+ 224   3                                                      {
+ 225   4                                                              temp=P3;
+ 226   4                                                              temp=temp&0xf0;
+ 227   4                                                      }
+ 228   3                              }
+ 229   2              }
+ 230   1                      P3=0xfd;
+ 231   1                      temp=P3;
+ 232   1                      temp=temp&0xf0;
+ 233   1                      while(temp!=0xf0)
+ 234   1                                      {
+ 235   2                                              delay(10);
+ 236   2                                              temp=P3;
+ 237   2                                              temp=temp&0xf0;
+ 238   2                                              while(temp!=0xf0)
+ 239   2                                              {
+ 240   3                                                      temp=P3;
+C51 COMPILER V9.00   KOBE                                                                  10/18/2014 19:42:38 PAGE 5   
+
+ 241   3                                              switch(temp)
+ 242   3                                                      {
+ 243   4                                                              case 0xed:cao=cao-60;
+ 244   4                                                                      break;
+ 245   4                                                              case 0xdd:cao=cao-3600;
+ 246   4                                                                      break;
+ 247   4                                                              case 0xbd:mode++;
+ 248   4                                                                      break;
+ 249   4                                                              case 0x7d:messi=messi+10;
+ 250   4                                                                      break;
+ 251   4                                                      }
+ 252   3                                                      while(temp!=0xf0)
+ 253   3                                                              {
+ 254   4                                                                      temp=P3;
+ 255   4                                                                      temp=temp&0xf0;
+ 256   4                                                              }
+ 257   3                                              }
+ 258   2                      P3=0xfb;
+ 259   2                      temp=P3;
+ 260   2                      temp=temp&0xf0;
+ 261   2                      while(temp!=0xf0)
+ 262   2                                      {
+ 263   3                                              delay(5);
+ 264   3                                              temp=P3;
+ 265   3                                              temp=temp&0xf0;
+ 266   3                                              while(temp!=0xf0)
+ 267   3                                              {
+ 268   4                                                      temp=P3;
+ 269   4                                              switch(temp)
+ 270   4                                                      {
+ 271   5                                                              case 0xeb:messi+600;
+*** WARNING C275 IN LINE 271 OF KOBE.C: expression with possibly no effect
+ 272   5                                                                      break;
+ 273   5                                                              case 0xdb:messi+36000;
+*** WARNING C275 IN LINE 273 OF KOBE.C: expression with possibly no effect
+ 274   5                                                                      break;
+ 275   5                                                              case 0xbb:cao-10;
+*** WARNING C275 IN LINE 275 OF KOBE.C: expression with possibly no effect
+ 276   5                                                                      break;
+ 277   5                                                              case 0x7b:cao-600;
+*** WARNING C275 IN LINE 277 OF KOBE.C: expression with possibly no effect
+ 278   5                                                                      break;
+ 279   5                                                      }
+ 280   4                                              while(temp!=0xf0)
+ 281   4                                                      {
+ 282   5                                                              temp=P3;
+ 283   5                                                              temp=temp&0xf0;
+ 284   5                                                      }
+ 285   4                                              }
+ 286   3                                      }
+ 287   2      
+ 288   2      
+ 289   2                              P3=0xf7;
+ 290   2                              temp=P3;
+ 291   2                              temp=temp&0xf0;
+ 292   2                              while(temp!=0xf0)
+ 293   2                              {
+ 294   3                                      delay(5);
+ 295   3                                      temp=P3;
+ 296   3                                      temp=temp&0xf0;
+ 297   3                                      while(temp!=0xf0)
+ 298   3                                      {
+C51 COMPILER V9.00   KOBE                                                                  10/18/2014 19:42:38 PAGE 6   
+
+ 299   4                                              temp=P3;
+ 300   4                                              switch(temp)
+ 301   4                                              {
+ 302   5                                                      case 0xe7:cao-3600;
+*** WARNING C275 IN LINE 302 OF KOBE.C: expression with possibly no effect
+ 303   5                                                              break;
+ 304   5                                                      case 0xd7:;
+ 305   5                                                              break;
+ 306   5                                                      case 0xb7:;
+ 307   5                                                              break;
+ 308   5                                                      case 0x77:;
+ 309   5                                                              break;
+ 310   5                                              }
+ 311   4                                              while(temp!=0xf0)
+ 312   4                                              {
+ 313   5                                                      temp=P3;
+ 314   5                                                      temp=temp&0xf0;
+ 315   5                                              }
+ 316   4                                      }
+ 317   3                              }
+ 318   2              }
+ 319   1      }
+*** WARNING C173 IN LINE 319 OF KOBE.C: missing return-expression
+ 320          void zd_clock() //整点报时函数
+ 321          {
+ 322   1              if((messi>cao)&(messi<cao+60))
+ 323   1              {
+ 324   2                      beep=0;
+ 325   2                      delay(1);
+ 326   2                      beep=1;
+ 327   2                      delay(1);
+ 328   2              }
+ 329   1      }
+*** WARNING C290 IN LINE 319 OF KOBE.C: missing return value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1331    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     25      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  7 WARNING(S),  0 ERROR(S)

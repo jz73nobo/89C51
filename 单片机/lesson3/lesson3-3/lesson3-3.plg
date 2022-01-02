@@ -1,0 +1,21 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+E:\µ¥Æ¬»ú\lesson3\lesson3-3\lesson3-3.uvproj
+Project File Date:  09/03/2014
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson3-3.c...
+LESSON3-3.C(18): error C141: syntax error near 'wela'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson3-3.c...
+LESSON3-3.C(35): warning C235: parameter 1: different types
+linking...
+Program Size: data=10.0 xdata=0 code=113
+"lesson3-3" - 0 Error(s), 1 Warning(s).

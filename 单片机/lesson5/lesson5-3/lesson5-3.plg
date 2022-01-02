@@ -1,0 +1,138 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+E:\µ¥Æ¬»ú\lesson5\lesson5-3\lesson5-3.uvproj
+Project File Date:  09/07/2014
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(9): error C202: 'key': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+linking...
+Program Size: data=9.0 xdata=0 code=29
+"lesson5-3" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+linking...
+Program Size: data=9.0 xdata=0 code=29
+"lesson5-3" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(6): error C142: 'SFR': invalid base address
+LESSON5-3.C(7): error C142: 'SFR': invalid base address
+LESSON5-3.C(13): error C141: syntax error near 'unsigned'
+LESSON5-3.C(22): error C183: unmodifiable lvalue
+LESSON5-3.C(28): error C202: 'wela': undefined identifier
+LESSON5-3.C(30): error C202: 'wela': undefined identifier
+LESSON5-3.C(31): error C202: 'dula': undefined identifier
+LESSON5-3.C(33): error C202: 'dula': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(6): error C142: 'SFR': invalid base address
+LESSON5-3.C(7): error C142: 'SFR': invalid base address
+LESSON5-3.C(28): error C202: 'wela': undefined identifier
+LESSON5-3.C(30): error C202: 'wela': undefined identifier
+LESSON5-3.C(31): error C202: 'dula': undefined identifier
+LESSON5-3.C(33): error C202: 'dula': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(6): error C142: 'SFR': invalid base address
+LESSON5-3.C(7): error C142: 'SFR': invalid base address
+LESSON5-3.C(28): error C202: 'wela': undefined identifier
+LESSON5-3.C(30): error C202: 'wela': undefined identifier
+LESSON5-3.C(31): error C202: 'dula': undefined identifier
+LESSON5-3.C(33): error C202: 'dula': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(6): error C142: 'SFR': invalid base address
+LESSON5-3.C(7): error C142: 'SFR': invalid base address
+LESSON5-3.C(16): error C202: 'wela': undefined identifier
+LESSON5-3.C(18): error C202: 'wela': undefined identifier
+LESSON5-3.C(32): error C202: 'dula': undefined identifier
+LESSON5-3.C(34): error C202: 'dula': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(6): error C142: 'SFR': invalid base address
+LESSON5-3.C(7): error C142: 'SFR': invalid base address
+LESSON5-3.C(16): error C202: 'wela': undefined identifier
+LESSON5-3.C(18): error C202: 'wela': undefined identifier
+LESSON5-3.C(32): error C202: 'dula': undefined identifier
+LESSON5-3.C(34): error C202: 'dula': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(6): error C142: 'SFR': invalid base address
+LESSON5-3.C(7): error C142: 'SFR': invalid base address
+LESSON5-3.C(16): error C202: 'wela': undefined identifier
+LESSON5-3.C(18): error C202: 'wela': undefined identifier
+LESSON5-3.C(31): error C202: 'dula': undefined identifier
+LESSON5-3.C(33): error C202: 'dula': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(6): error C142: 'SFR': invalid base address
+LESSON5-3.C(7): error C142: 'SFR': invalid base address
+LESSON5-3.C(16): error C202: 'wela': undefined identifier
+LESSON5-3.C(18): error C202: 'wela': undefined identifier
+LESSON5-3.C(31): error C202: 'dula': undefined identifier
+LESSON5-3.C(33): error C202: 'dula': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(6): error C142: 'SFR': invalid base address
+LESSON5-3.C(7): error C142: 'SFR': invalid base address
+LESSON5-3.C(16): error C202: 'wela': undefined identifier
+LESSON5-3.C(18): error C202: 'wela': undefined identifier
+LESSON5-3.C(33): error C202: 'dula': undefined identifier
+LESSON5-3.C(35): error C202: 'dula': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+linking...
+Program Size: data=10.0 xdata=0 code=74
+"lesson5-3" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+linking...
+Program Size: data=10.0 xdata=0 code=86
+"lesson5-3" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+LESSON5-3.C(42): error C141: syntax error near 'else'
+LESSON5-3.C(51): error C141: syntax error near '}'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+linking...
+Program Size: data=10.0 xdata=0 code=117
+"lesson5-3" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-3.c...
+linking...
+Program Size: data=10.0 xdata=0 code=127
+"lesson5-3" - 0 Error(s), 0 Warning(s).

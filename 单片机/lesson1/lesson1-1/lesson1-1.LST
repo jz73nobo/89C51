@@ -1,0 +1,462 @@
+C51 COMPILER V9.00   LESSON1_1                                                             10/16/2014 19:46:56 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE LESSON1_1
+OBJECT MODULE PLACED IN lesson1-1.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE lesson1-1.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #define uint unsigned int
+   3          #define uchar unsigned char
+   4          sbit dula=P2^6; //数码管段选
+   5          sbit wela=P2^7; //数码管位选
+   6          sbit fm=P2^3; //蜂鸣器
+   7          sbit s2=P3^4; //s2按键,设置调时
+   8          sbit s3=P3^5; //s3按键,加1
+   9          sbit s4=P3^6; //s4按键,减1
+  10          sbit s5=P3^7; //s5按键,切换显示
+  11          sbit led1=P1^0;
+  12          sbit led2=P1^1;
+  13          sbit led3=P1^2;
+  14          //sbit led4=P1^3;
+  15          //sbit led5=P1^4;
+  16          //sbit led6=P1^5;
+  17          //sbit led7=P1^6;
+  18          //sbit led8=P1^7;
+  19          uchar count;
+  20          uchar sec,minu,hour,day,week,mon;
+  21          uchar n_sec,n_minu,n_hour;
+  22          uint year;
+  23          uchar set_2=1,set_5=1;
+  24          uchar hs,hg,mis,mig,ss,sg;
+  25          uchar nhs,nhg,nms,nmg,nss=0,nsg=0;
+  26          uchar ms,mg,ds,dg,w;
+  27          uchar code table[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,
+  28          0x90,0x88,0x83,0xc6,0xa1,0x8e,0x86,0xbf}; //0~F,-,共阳
+  29          uchar code tableyi[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,
+  30          0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0x40};//0-F,-,共阴
+  31          uchar code table_d[]={0xbf,0x86,0xdb,0xcf,0xe6,0xed,0xfd,
+  32          0x87,0xff,0xef}; //0~9数组，带小数点
+  33          uchar table1[]={31,31,29,31,30,31,30,31,31,30,31,30,31}; //闰年
+  34          uchar table2[]={31,31,28,31,30,31,30,31,31,30,31,30,31}; //非闰年
+  35          void delay(uint); //延时函数
+  36          void timer0(); //走时中断函数
+  37          void jishi(); //计时函数
+  38          void key_change(); //切换显示按键函数
+  39          void key_set(); //设置时间按键函数
+  40          void disp(uchar,uchar,uchar,uchar,uchar,uchar); //显示函数
+  41          void zd_clock(); //整点报时函数
+  42          void nz_clock(); //闹钟函数
+  43          uchar incone(uchar); //加1函数
+  44          uchar decone(uchar); //减1函数
+  45          void set_time(); //设置时间函数
+  46          void set_clock(); //设置闹钟函数
+  47          void set_mdw(); //设置月日星期函数
+  48          
+  49          void main() //主函数
+  50          {
+  51   1      EA=1;
+  52   1      ET0=1;
+  53   1      TR0=1;
+  54   1      TMOD=0x01;
+  55   1      TH0=0x4c; //50ms初值 晶振11.0592
+C51 COMPILER V9.00   LESSON1_1                                                             10/16/2014 19:46:56 PAGE 2   
+
+  56   1      TL0=0x00;
+  57   1      hour=23;minu=59;sec=49; //赋初值：11点59分0秒
+  58   1      n_hour=12;n_minu=56;n_sec=13; //闹钟赋初值12点1分0秒
+  59   1      year=2008;mon=5;day=14;week=3;//年月日星期赋初值2008年5月11日星期天；祝天下所有母亲节日快乐
+  60   1      while(1)
+  61   1      {
+  62   2      hs=hour/10; //时分秒HH.MM.SS
+  63   2      hg=hour%10;
+  64   2      mis=minu/10;
+  65   2      mig=minu%10;
+  66   2      ss=sec/10;
+  67   2      sg=sec%10;
+  68   2      
+  69   2      ms=mon/10; //月日-星期MM.DD.-W
+  70   2      mg=mon%10;
+  71   2      ds=day/10;
+  72   2      dg=day%10;
+  73   2      w=week;
+  74   2      nhs=n_hour/10; //闹钟定时HH.MM.SS
+  75   2      nhg=n_hour%10;
+  76   2      nms=n_minu/10;
+  77   2      nmg=n_minu%10;
+  78   2      nss=n_sec/10;
+  79   2      nsg=n_sec%10;
+  80   2      key_change(); //s5按键扫描
+  81   2      key_set(); //s2按键扫描
+  82   2      set_time(); //设置时间
+  83   2      set_mdw(); //设置月日星期
+  84   2      set_clock(); //设置闹钟
+  85   2      
+  86   2      
+  87   2      if(set_5==1) //正常走时显示
+  88   2      {
+  89   3      disp(hs,hg,mis,mig,ss,sg);
+  90   3      }
+  91   2      if(set_5==2) //设置时间,LED1闪亮
+  92   2      {
+  93   3      disp(hs,hg,mis,mig,ss,sg);
+  94   3      if(sec%2==0)
+  95   3      {led2=1;led3=1;led1=~led1;}
+  96   3      // else
+  97   3      // {led1=1;}
+  98   3      }
+  99   2      if(set_5==3) //正常显示月日-星期
+ 100   2      {
+ 101   3      disp(ms,mg,ds,dg,16,w);
+ 102   3      }
+ 103   2      if(set_5==4) //设置月日-星期,LED2闪亮
+ 104   2      {
+ 105   3      disp(ms,mg,ds,dg,16,w);
+ 106   3      if(sec%2==0)
+ 107   3      {led1=1;led3=1;led2=~led2;}
+ 108   3      
+ 109   3      // else
+ 110   3      // {led2=1;}
+ 111   3      }
+ 112   2      
+ 113   2      if(set_5==5) //正常显示定时
+ 114   2      {
+ 115   3      disp(nhs,nhg,nms,nmg,nss,nsg);
+ 116   3      }
+ 117   2      if(set_5==6) //设置闹钟定时,LED3闪亮
+C51 COMPILER V9.00   LESSON1_1                                                             10/16/2014 19:46:56 PAGE 3   
+
+ 118   2      {
+ 119   3      disp(nhs,nhg,nms,nmg,nss,nsg);
+ 120   3      if(sec%2==0)
+ 121   3      {led1=1;led2=1;led3=~led3;}
+ 122   3      
+ 123   3      // else
+ 124   3      // {led3=1;}
+ 125   3      }
+ 126   2      
+ 127   2      zd_clock(); //整点报时
+ 128   2      nz_clock(); //闹钟
+ 129   2      }
+ 130   1      
+ 131   1      }
+ 132          void timer0() interrupt 1 //50ms中断函数
+ 133          {
+ 134   1      TMOD=0x01;
+ 135   1      TH0=0x4c; //50ms初值 晶振11.0592
+ 136   1      TL0=0x00;
+ 137   1      count++;
+ 138   1      if(count==20)
+ 139   1      {
+ 140   2      count=0;
+ 141   2      sec++;
+ 142   2      jishi(); //调计时函数
+ 143   2      }
+ 144   1      }
+ 145          void jishi() //计时函数
+ 146          {
+ 147   1      if(sec==60)
+ 148   1      {
+ 149   2      sec=0;
+ 150   2      minu++;
+ 151   2      if(minu==60)
+ 152   2      {
+ 153   3      minu=0;
+ 154   3      hour++;
+ 155   3      if(hour==24)
+ 156   3      { hour=0;
+ 157   4      day++;
+ 158   4      week++;
+ 159   4      if(week==8)
+ 160   4      {week=0;}
+ 161   4      if(year%4==0&&year%100!=0||year%400==0) //闰年
+ 162   4      {
+ 163   5      if(day==table1[mon]+1)
+ 164   5      {
+ 165   6      day=0;
+ 166   6      mon++;
+ 167   6      if(mon==13)
+ 168   6      {mon=0;year++;}
+ 169   6      }
+ 170   5      }
+ 171   4      else //非闰年
+ 172   4      {
+ 173   5      if(day==table2[mon]+1)
+ 174   5      {
+ 175   6      day=0;
+ 176   6      mon++;
+ 177   6      if(mon==13)
+ 178   6      {mon=0;year++;}
+ 179   6      }
+C51 COMPILER V9.00   LESSON1_1                                                             10/16/2014 19:46:56 PAGE 4   
+
+ 180   5      }
+ 181   4      }
+ 182   3      }
+ 183   2      }
+ 184   1      }
+ 185          void key_change() //s5按键扫描
+ 186          {
+ 187   1      if(s5==0)
+ 188   1      {
+ 189   2      delay(200);
+ 190   2      if(s5==0)
+ 191   2      {
+ 192   3      set_5++;
+ 193   3      while(!s5);
+ 194   3      if(set_5==7)
+ 195   3      {set_5=1;}
+ 196   3      }
+ 197   2      }
+ 198   1      }
+ 199          
+ 200          void key_set() //s2按键扫描
+ 201          {
+ 202   1      if(s2==0)
+ 203   1      {
+ 204   2      delay(10);
+ 205   2      if(s2==0)
+ 206   2      {
+ 207   3      set_2++;
+ 208   3      while(!s2);
+ 209   3      if(set_2==4)
+ 210   3      {set_2=1;}
+ 211   3      }
+ 212   2      }
+ 213   1      
+ 214   1      }
+ 215          void disp(uchar a1,uchar a2,uchar a3,uchar a4,uchar a5,uchar a6) //显示函数
+ 216          {
+ 217   1      dula=0;
+ 218   1      P0=table[a1]; //段码送P0口
+ 219   1      dula=1; //选定段选
+ 220   1      dula=0; //关段选
+ 221   1      
+ 222   1      wela=0;
+ 223   1      P0=0x01; //位选(第1个数码管)送P0
+ 224   1      wela=1; //选定位选
+ 225   1      wela=0; //关位选
+ 226   1      delay(1); //延时一小会
+ 227   1      
+ 228   1      dula=0;
+ 229   1      P0=table[a2]; //第2个数码管显示,带小数点
+ 230   1      dula=1;
+ 231   1      dula=0;
+ 232   1      
+ 233   1      P0=0x02;
+ 234   1      wela=1;
+ 235   1      wela=0;
+ 236   1      delay(1);
+ 237   1      
+ 238   1      dula=0;
+ 239   1      P0=table[a3]; //第3个数码管显示
+ 240   1      dula=1;
+ 241   1      dula=0;
+C51 COMPILER V9.00   LESSON1_1                                                             10/16/2014 19:46:56 PAGE 5   
+
+ 242   1      
+ 243   1      wela=0;
+ 244   1      P0=0x04;
+ 245   1      wela=1;
+ 246   1      wela=0;
+ 247   1      delay(1);
+ 248   1      
+ 249   1      P0=table[a4]; //第4个数码管显示,带小数点
+ 250   1      dula=1;
+ 251   1      dula=0;
+ 252   1      
+ 253   1      P0=0x08;
+ 254   1      wela=1;
+ 255   1      wela=0;
+ 256   1      delay(1);
+ 257   1      
+ 258   1      dula=0; //第5个数码管显示
+ 259   1      P0=table[a5];
+ 260   1      dula=1;
+ 261   1      dula=0;
+ 262   1      
+ 263   1      wela=0;
+ 264   1      P0=0x10;
+ 265   1      wela=1;
+ 266   1      wela=0;
+ 267   1      delay(1);
+ 268   1      
+ 269   1      P0=table[a6]; //第6个数码管显示
+ 270   1      dula=1;
+ 271   1      dula=0;
+ 272   1      
+ 273   1      P0=0x20;
+ 274   1      wela=1;
+ 275   1      wela=0;
+ 276   1      delay(1);
+ 277   1      }
+ 278          void zd_clock() //整点报时函数
+ 279          {
+ 280   1      if(minu==59&&(sec==53||sec==55||sec==57))
+ 281   1      {
+ 282   2      fm=0;
+ 283   2      delay(1);
+ 284   2      fm=1;
+ 285   2      delay(1);
+ 286   2      }
+ 287   1      if(minu==59&&sec==59)
+ 288   1      {
+ 289   2      fm=0;
+ 290   2      delay(1);
+ 291   2      fm=1;
+ 292   2      delay(1);
+ 293   2      }
+ 294   1      }
+ 295          void nz_clock() //闹钟函数
+ 296          {
+ 297   1      if(hour==n_hour&&minu==n_minu&&sec==n_sec)
+ 298   1      if((sec%2==0)&&sec<30)
+ 299   1      {
+ 300   2      fm=0;
+ 301   2      delay(20);
+ 302   2      fm=1;
+ 303   2      delay(20);
+C51 COMPILER V9.00   LESSON1_1                                                             10/16/2014 19:46:56 PAGE 6   
+
+ 304   2      }
+ 305   1      }
+ 306          void set_time() //设置时间函数
+ 307          {
+ 308   1      if(set_5==2)
+ 309   1      {
+ 310   2      if(set_2==1)
+ 311   2      {
+ 312   3      hour=incone(hour);
+ 313   3      if(hour==24)
+ 314   3      {hour=0;}
+ 315   3      // if(hour<0)
+ 316   3      // {hour=23;}
+ 317   3      hour=decone(hour);
+ 318   3      
+ 319   3      
+ 320   3      }
+ 321   2      if(set_2==2)
+ 322   2      {
+ 323   3      minu=incone(minu);
+ 324   3      if(minu==60)
+ 325   3      {minu=0;}
+ 326   3      // if(minu<0)
+ 327   3      // {minu=59;}
+ 328   3      minu=decone(minu);
+ 329   3      
+ 330   3      }
+ 331   2      }
+ 332   1      }
+ 333          void set_mdw() //设置月日星期函数
+ 334          {
+ 335   1      if(set_5==4)
+ 336   1      {
+ 337   2      if(set_2==1)
+ 338   2      {
+ 339   3      mon=incone(mon);
+ 340   3      if(mon==13)
+ 341   3      {mon=1;}
+ 342   3      mon=decone(mon);
+ 343   3      // if(mon==0)
+ 344   3      // {mon=12;}
+ 345   3      }
+ 346   2      if(set_2==2)
+ 347   2      {
+ 348   3      day=incone(day);
+ 349   3      if(day==32)
+ 350   3      {day=0;}
+ 351   3      day=decone(day);
+ 352   3      // if(day==0)
+ 353   3      // {day=0;}
+ 354   3      }
+ 355   2      if(set_2==3)
+ 356   2      {
+ 357   3      week=incone(week);
+ 358   3      if(week==8)
+ 359   3      {week=0;}
+ 360   3      week=decone(week);
+ 361   3      // if(week==0)
+ 362   3      // {week=7;}
+ 363   3      }
+ 364   2      }
+ 365   1      }
+C51 COMPILER V9.00   LESSON1_1                                                             10/16/2014 19:46:56 PAGE 7   
+
+ 366          void set_clock() //设置闹钟函数
+ 367          {
+ 368   1      if(set_5==6)
+ 369   1      {
+ 370   2      if(set_2==1)
+ 371   2      {
+ 372   3      n_hour=incone(n_hour);
+ 373   3      if(n_hour==24)
+ 374   3      {n_hour=0;}
+ 375   3      n_hour=decone(n_hour);
+ 376   3      // if(n_hour==0)
+ 377   3      // {n_hour=0;}
+ 378   3      }
+ 379   2      if(set_2==2)
+ 380   2      {
+ 381   3      n_minu=incone(n_minu);
+ 382   3      if(n_minu==60)
+ 383   3      {n_minu=0;}
+ 384   3      n_minu=decone(n_minu);
+ 385   3      // if(n_minu==0)
+ 386   3      // {n_minu=0;}
+ 387   3      }
+ 388   2      }
+ 389   1      
+ 390   1      }
+ 391          uchar incone(uchar n) //加1函数
+ 392          {
+ 393   1      if(s3==0)
+ 394   1      { delay(200);
+ 395   2      if(s3==0)
+ 396   2      {
+ 397   3      n++;
+ 398   3      while(!s3);
+ 399   3      }
+ 400   2      }
+ 401   1      return(n);
+ 402   1      }
+ 403          uchar decone(uchar m) //减1函数
+ 404          {
+ 405   1      if(s4==0)
+ 406   1      {
+ 407   2      delay(200);
+ 408   2      if(s4==0)
+ 409   2      {
+ 410   3      m--;
+ 411   3      while(!s4);
+ 412   3      if(m<0)
+ 413   3      {m=0;}
+ 414   3      }
+ 415   2      }
+ 416   1      
+ 417   1      return(m);
+ 418   1      }
+ 419          
+ 420          void delay(uint k) //延时函数
+ 421          {
+ 422   1      uint i,j;
+ 423   1      for(i=k;i>0;i--)
+ 424   1      for(j=80;j>0;j--);
+ 425   1      }
+
+
+C51 COMPILER V9.00   LESSON1_1                                                             10/16/2014 19:46:56 PAGE 8   
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1204    ----
+   CONSTANT SIZE    =     44    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     57       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

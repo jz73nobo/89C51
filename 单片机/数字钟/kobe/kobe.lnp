@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"kobe.obj" 
+TO "kobe" 
+RAMSIZE(256) 

@@ -1,0 +1,84 @@
+C51 COMPILER V9.00   LESSON5_1                                                             09/06/2014 16:07:43 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE LESSON5_1
+OBJECT MODULE PLACED IN lesson5-1.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE lesson5-1.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #define uint unsigned int
+   3          #define uchar unsigned char
+   4          sbit wela=P2^7;
+   5          sbit dula=P2^6;
+   6          uchar temp,aa;
+   7          uchar code table[]={
+   8          0x3f,0x06,0x5b,0x4f,
+   9          0x66,0x6d,0x7d,0x07,
+  10          0x7f,0x6f,0x77,0x7c,
+  11          0x39,0x5e,0x79,0x71};
+  12          uchar code tablewe[]={
+  13          0xfe,0xfd,0xfb,0xf7,0xef,0xdf};
+  14          void delay(uint z);
+  15          void init();
+  16          void main()
+  17          {
+  18   1              init();
+  19   1              while(1)
+  20   1              {
+  21   2                      wela=1;
+  22   2                      P0=table[temp];
+  23   2                      temp++;
+  24   2                      wela=0;
+  25   2                      if(temp==6)
+  26   2                      temp=0;
+  27   2                      delay(1000);
+  28   2                      
+  29   2                      dula=1;
+  30   2                      P0=table[aa];
+  31   2                      aa++;
+  32   2                      dula=0;
+  33   2                      if(aa==6);
+  34   2                      aa=0;
+  35   2                      delay(1000);                    
+  36   2              }
+  37   1      }
+  38          void init()
+  39          {
+  40   1              temp=0;
+  41   1              aa=0;
+  42   1              TMOD=0x01;
+  43   1              TH0=(65536-50000)/256;
+  44   1              TL0=(65536-50000)%256;
+  45   1              EA=1;
+  46   1              ET0=1;
+  47   1              TR0=1;  
+  48   1      }
+  49          void timer0() interrupt 1
+  50          {
+  51   1              TH0=(65536-50000)/256;
+  52   1              TL0=(65536-50000)%256;
+  53   1      }
+  54          void delay(uint z)
+  55          {
+C51 COMPILER V9.00   LESSON5_1                                                             09/06/2014 16:07:43 PAGE 2   
+
+  56   1              uint x,y;
+  57   1              for(x=z;x>0;x--)
+  58   1                      for(y=110;y>0;y--); 
+  59   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    116    ----
+   CONSTANT SIZE    =     22    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

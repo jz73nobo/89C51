@@ -1,0 +1,22 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+E:\µ¥Æ¬»ú\lesson5\lesson5-2\lesson5-2.uvproj
+Project File Date:  09/07/2014
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-2.c...
+LESSON5-2.C(2): error C202: 'P2': undefined identifier
+LESSON5-2.C(3): error C202: 'P2': undefined identifier
+LESSON5-2.C(4): error C129: missing ';' before 'code'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling lesson5-2.c...
+linking...
+Program Size: data=25.0 xdata=0 code=603
+"lesson5-2" - 0 Error(s), 0 Warning(s).
